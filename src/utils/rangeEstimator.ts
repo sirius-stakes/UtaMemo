@@ -35,6 +35,23 @@ export function resolveSongShift(record: UserSongRecord | undefined, defaultShif
   return record.octaveShift + record.keyShift;
 }
 
+/**
+ * 曲・記録・設定から実際に歌う音域（シフト適用後）を求める。
+ * 一覧の「音域内のみ」フィルタやカード表示で共通利用する。
+ */
+export function getEffectiveRange(
+  song: Song,
+  record: UserSongRecord | undefined,
+  settings: UserSettings,
+): { lowestNote: MidiNote; highestNote: MidiNote; shift: number } {
+  const shift = resolveSongShift(record, resolveDefaultShift(settings));
+  return {
+    lowestNote: (record?.personalLowestNote ?? song.lowestNote) + shift,
+    highestNote: (record?.personalHighestNote ?? song.highestNote) + shift,
+    shift,
+  };
+}
+
 /** ユーザー設定のデフォルトシフト量。 */
 export function resolveDefaultShift(settings: UserSettings): number {
   return settings.defaultOctaveShift + settings.defaultKeyShift;

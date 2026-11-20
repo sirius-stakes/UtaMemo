@@ -72,6 +72,15 @@ export const COMFORT_LABELS: Record<ComfortLevel, string> = {
   unrated: '未記録',
 };
 
+/** 感触の短縮ラベル（カード内のコンパクト表示用）。 */
+export const COMFORT_SHORT_LABELS: Record<ComfortLevel, string> = {
+  great: '上手',
+  good: '歌える',
+  awkward: '微妙',
+  bad: 'ダメ',
+  unrated: '未記録',
+};
+
 /** デフォルト設定（55 = mid1G, 72 = hiC）。 */
 export const DEFAULT_SETTINGS: UserSettings = {
   comfortableLowestNote: 55,

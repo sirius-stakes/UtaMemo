@@ -8,6 +8,22 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // テーマの初期適用（描画前のちらつきを防ぐ）
+      (function () {
+        try {
+          var raw = localStorage.getItem('utamemo:data');
+          var theme = raw ? (JSON.parse(raw).settings || {}).theme : null;
+          var dark =
+            theme === 'dark' ||
+            ((!theme || theme === 'system') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {
+          /* 読み込み失敗時はライトモード */
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
