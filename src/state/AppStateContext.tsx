@@ -12,7 +12,9 @@ import { clampMidiNote } from '../constants/notes';
 import type {
   AppStorageData,
   ComfortLevel,
+  KaraokeSystem,
   MidiNote,
+  ScoreRecord,
   Song,
   UserSettings,
   UserSongRecord,
@@ -46,6 +48,19 @@ export interface NewSongInput {
   memo?: string;
 }
 
+/** 「採点を記録」フォームから渡される入力値。 */
+export interface NewScoreInput {
+  songId: string;
+  score: number;
+  recordedAt: string;
+  system?: KaraokeSystem;
+  keyShift?: number;
+  memo?: string;
+}
+
+/** 楽曲情報の編集で上書きできるフィールド。 */
+export type SongEditPatch = Partial<Omit<Song, 'id' | 'createdAt' | 'isCustom'>>;
+
 interface AppStateContextValue {
   data: AppStorageData;
   songs: Song[];
@@ -54,6 +69,10 @@ interface AppStateContextValue {
   songLoadError: string | null;
   activeView: ViewId;
   setActiveView: (view: ViewId) => void;
+  /** 詳細モーダルで表示中の曲 ID（null のときは非表示）。 */
+  detailSongId: string | null;
+  openSongDetail: (songId: string) => void;
+  closeSongDetail: () => void;
   resolvedTheme: 'light' | 'dark';
   updateSettings: (patch: Partial<UserSettings>) => void;
   setTheme: (theme: UserSettings['theme']) => void;
@@ -64,6 +83,10 @@ interface AppStateContextValue {
   setSongOctaveShift: (songId: string, shift: number) => void;
   setGlobalOctaveShift: (shift: number) => void;
   addSong: (input: NewSongInput) => void;
+  updateSong: (songId: string, patch: SongEditPatch) => void;
+  deleteSong: (songId: string) => void;
+  addScoreRecord: (input: NewScoreInput) => void;
+  deleteScoreRecord: (scoreId: string) => void;
   exportBackup: () => void;
   importBackup: (json: string) => ImportResult;
 }
@@ -132,6 +155,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const [loadingSongs, setLoadingSongs] = useState(true);
   const [songLoadError, setSongLoadError] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<ViewId>('recommend');
+  const [detailSongId, setDetailSongId] = useState<string | null>(null);
   const prefersDark = usePrefersDark();
 
   // ユーザーデータを localStorage に永続化。
@@ -268,6 +292,71 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setData((prev) => ({ ...prev, customSongs: [...prev.customSongs, song] }));
   }, []);
 
+  /** 楽曲情報を編集する。追加曲は直接更新し、マスター曲は上書きとして保存する。 */
+  const updateSong = useCallback(
+    (songId: string, patch: SongEditPatch) => {
+      const current = songs.find((song) => song.id === songId);
+      if (!current) return;
+      const updated: Song = { ...current, ...patch };
+      setData((prev) => {
+        const songOverrides = { ...prev.songOverrides };
+        delete songOverrides[songId];
+        if (current.isCustom) {
+          return {
+            ...prev,
+            customSongs: prev.customSongs.map((song) =>
+              song.id === songId ? { ...updated, isCustom: true } : song,
+            ),
+            songOverrides,
+          };
+        }
+        return { ...prev, songOverrides: { ...songOverrides, [songId]: updated } };
+      });
+    },
+    [songs],
+  );
+
+  /** 追加曲を削除する（関連する記録・採点履歴も併せて削除）。 */
+  const deleteSong = useCallback((songId: string) => {
+    setData((prev) => {
+      if (!prev.customSongs.some((song) => song.id === songId)) return prev;
+      const songOverrides = { ...prev.songOverrides };
+      delete songOverrides[songId];
+      const userSongRecords = { ...prev.userSongRecords };
+      delete userSongRecords[songId];
+      return {
+        ...prev,
+        customSongs: prev.customSongs.filter((song) => song.id !== songId),
+        songOverrides,
+        userSongRecords,
+        scoreHistory: prev.scoreHistory.filter((record) => record.songId !== songId),
+      };
+    });
+  }, []);
+
+  const addScoreRecord = useCallback((input: NewScoreInput) => {
+    const record: ScoreRecord = {
+      id: `score-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      songId: input.songId,
+      score: Math.max(0, Math.min(100, Math.round(input.score))),
+      recordedAt: input.recordedAt,
+      system: input.system,
+      keyShift: input.keyShift === undefined ? undefined : Math.max(-12, Math.min(12, Math.round(input.keyShift))),
+      memo: input.memo?.trim() || undefined,
+    };
+    setData((prev) => ({ ...prev, scoreHistory: [...prev.scoreHistory, record] }));
+  }, []);
+
+  const deleteScoreRecord = useCallback((scoreId: string) => {
+    setData((prev) => ({
+      ...prev,
+      scoreHistory: prev.scoreHistory.filter((record) => record.id !== scoreId),
+    }));
+  }, []);
+
+  const openSongDetail = useCallback((songId: string) => setDetailSongId(songId), []);
+  const closeSongDetail = useCallback(() => setDetailSongId(null), []);
+
   const exportBackup = useCallback(() => downloadJsonBackup(data), [data]);
 
   const importBackup = useCallback((json: string): ImportResult => {
@@ -285,6 +374,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       songLoadError,
       activeView,
       setActiveView,
+      detailSongId,
+      openSongDetail,
+      closeSongDetail,
       resolvedTheme,
       updateSettings,
       setTheme,
@@ -295,6 +387,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       setSongOctaveShift,
       setGlobalOctaveShift,
       addSong,
+      updateSong,
+      deleteSong,
+      addScoreRecord,
+      deleteScoreRecord,
       exportBackup,
       importBackup,
     }),
@@ -305,6 +401,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       loadingSongs,
       songLoadError,
       activeView,
+      detailSongId,
+      openSongDetail,
+      closeSongDetail,
       resolvedTheme,
       updateSettings,
       setTheme,
@@ -315,6 +414,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       setSongOctaveShift,
       setGlobalOctaveShift,
       addSong,
+      updateSong,
+      deleteSong,
+      addScoreRecord,
+      deleteScoreRecord,
       exportBackup,
       importBackup,
     ],

@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import { ListMusicIcon, LogoIcon, MoonIcon, SettingsIcon, SparklesIcon, SunIcon, WaveIcon } from './components/icons';
+import { SongDetailModal } from './components/SongDetailModal';
 import { AppStateProvider, useAppState, type ViewId } from './state/AppStateContext';
 import { RecordsSettingsView } from './views/RecordsSettingsView';
 import { RecommendView } from './views/RecommendView';
@@ -76,6 +77,9 @@ function AppShell() {
         {activeView === 'vocal' && <VocalRangeView />}
         {activeView === 'records' && <RecordsSettingsView />}
       </main>
+
+      {/* 楽曲カードから開く詳細・記録モーダル */}
+      <SongDetailModal />
 
       {/* スマホ向けボトムナビゲーション */}
       <nav

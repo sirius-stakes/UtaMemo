@@ -93,6 +93,12 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
 /* ---------- テキスト / サーフェス ---------- */
 .text-muted { color: var(--muted); }
 .text-faint { color: var(--faint); }

@@ -137,6 +137,7 @@ export function createDefaultStorageData(): AppStorageData {
     customSongs: [],
     userSongRecords: {},
     scoreHistory: [],
+    songOverrides: {},
     settings: createDefaultSettings(),
   };
 }
@@ -168,11 +169,19 @@ export function normalizeStorageData(
 
   const scoreHistory = Array.isArray(value.scoreHistory) ? value.scoreHistory.filter(isScoreRecord) : [];
 
+  const songOverrides: Record<string, Song> = {};
+  if (isObject(value.songOverrides)) {
+    for (const [songId, song] of Object.entries(value.songOverrides)) {
+      if (isSong(song) && song.id === songId) songOverrides[songId] = song;
+    }
+  }
+
   return {
     schemaVersion: STORAGE_SCHEMA_VERSION,
     customSongs,
     userSongRecords,
     scoreHistory,
+    songOverrides,
     settings: normalizeSettings(value.settings, defaults.settings),
     exportedAt: typeof value.exportedAt === 'string' ? value.exportedAt : undefined,
   };
@@ -245,10 +254,17 @@ export function importStorageData(json: string, persist = true): ImportResult {
   }
 }
 
-/** 静的マスターとユーザー追加曲を ID でマージする（追加曲が優先）。 */
+/**
+ * 静的マスター・ユーザー追加曲・編集内容を ID でマージする。
+ * 優先順位は「編集内容 ＞ 追加曲 ＞ 静的マスター」。
+ */
 export function mergeSongsWithCustom(initialSongs: readonly Song[], data: AppStorageData): Song[] {
   const songsById = new Map<string, Song>();
   for (const song of initialSongs) songsById.set(song.id, song);
   for (const song of data.customSongs) songsById.set(song.id, { ...song, isCustom: true });
+  for (const song of Object.values(data.songOverrides)) {
+    if (!songsById.has(song.id)) continue;
+    songsById.set(song.id, { ...song, isCustom: songsById.get(song.id)?.isCustom ?? song.isCustom });
+  }
   return [...songsById.values()];
 }

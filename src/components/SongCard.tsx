@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { COMFORT_LABELS } from '../constants/config';
 import { formatNoteRange } from '../constants/notes';
 import { useAppState } from '../state/AppStateContext';
@@ -36,8 +36,21 @@ export function SongCard({
   score?: SingabilityResult;
   mode: 'recommend' | 'list';
 }) {
-  const { setComfort, setSongKeyShift } = useAppState();
+  const { setComfort, setSongKeyShift, openSongDetail } = useAppState();
   const [showReasons, setShowReasons] = useState(false);
+
+  // カード内のボタン・リンク・入力を操作したときは詳細を開かない。
+  const handleCardClick = (event: MouseEvent<HTMLElement>) => {
+    if ((event.target as HTMLElement).closest('button, a, input, select, textarea, label')) return;
+    openSongDetail(song.id);
+  };
+  const handleCardKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.target !== event.currentTarget) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openSongDetail(song.id);
+    }
+  };
 
   const result = useMemo(
     () =>
@@ -59,7 +72,13 @@ export function SongCard({
   const links = song.links;
 
   return (
-    <article className="app-card p-4">
+    <article
+      className="app-card cursor-pointer p-4"
+      tabIndex={0}
+      aria-label={`${song.title} の詳細を開く`}
+      onClick={handleCardClick}
+      onKeyDown={handleCardKeyDown}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-[0.98rem] font-bold leading-snug">{song.title}</h3>
@@ -180,6 +199,16 @@ export function SongCard({
           )}
         </div>
       )}
+
+      <div className="mt-3 flex justify-end">
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm"
+          onClick={() => openSongDetail(song.id)}
+        >
+          詳細・採点を記録
+        </button>
+      </div>
     </article>
   );
 }

@@ -2,7 +2,7 @@ import type { ComfortLevel, UserSettings } from '../types/karaoke';
 
 /** localStorage のキーとスキーマバージョン。 */
 export const STORAGE_KEY = 'utamemo:data';
-export const STORAGE_SCHEMA_VERSION = 1;
+export const STORAGE_SCHEMA_VERSION = 2;
 
 /** 推薦設定: 選択ジャンル : 非選択ジャンル（合計） = 1.5 : 1。 */
 export const RECOMMENDATION_CONFIG = {

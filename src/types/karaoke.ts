@@ -100,6 +100,8 @@ export interface AppStorageData {
   userSongRecords: Record<string, UserSongRecord>;
   /** 全曲分の採点履歴（songId で絞り込んで利用）。 */
   scoreHistory: ScoreRecord[];
+  /** 静的マスター曲の編集内容（曲 ID → 編集後の楽曲情報）。 */
+  songOverrides: Record<string, Song>;
   settings: UserSettings;
   /** エクスポート時に付与される日時（ISO 8601 文字列）。 */
   exportedAt?: string;
