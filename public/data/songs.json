@@ -1,0 +1,169 @@
+[
+  {
+    "id": "song-001",
+    "title": "群青",
+    "artist": "YOASOBI",
+    "genre": "J-POP",
+    "lowestNote": 55,
+    "highestNote": 74,
+    "availability": { "dam": true, "joysound": true },
+    "links": {
+      "listenUrl": "https://www.youtube.com/results?search_query=YOASOBI+%E7%BE%A4%E9%9D%92",
+      "lyricsUrl": "https://www.google.com/search?q=YOASOBI+%E7%BE%A4%E9%9D%92+%E6%AD%8C%E8%A9%9E"
+    },
+    "utattemitaMemo": "サビの高音が伸びるのでキー調整候補は -2 〜 +2。",
+    "createdAt": "2026-01-05T00:00:00.000Z"
+  },
+  {
+    "id": "song-002",
+    "title": "怪物",
+    "artist": "YOASOBI",
+    "genre": "J-POP",
+    "lowestNote": 57,
+    "highestNote": 76,
+    "availability": { "dam": false, "joysound": true },
+    "links": {
+      "listenUrl": "https://www.youtube.com/results?search_query=YOASOBI+%E6%80%AA%E7%89%A9"
+    },
+    "createdAt": "2026-01-05T00:00:00.000Z"
+  },
+  {
+    "id": "song-003",
+    "title": "残酷な天使のテーゼ",
+    "artist": "高橋洋子",
+    "genre": "アニメ",
+    "lowestNote": 50,
+    "highestNote": 79,
+    "availability": { "dam": true, "joysound": true },
+    "utattemitaMemo": "定番。サビは hiG 付近まで出るので無理せずオク下も選択肢。",
+    "createdAt": "2026-01-06T00:00:00.000Z"
+  },
+  {
+    "id": "song-004",
+    "title": "魂のルフラン",
+    "artist": "高橋洋子",
+    "genre": "アニメ",
+    "lowestNote": 52,
+    "highestNote": 81,
+    "availability": { "dam": true, "joysound": true },
+    "links": {
+      "lyricsUrl": "https://www.google.com/search?q=%E9%AB%98%E6%A9%8B%E6%B4%8B%E5%AD%90+%E9%AD%82%E3%81%AE%E3%83%AB%E3%83%95%E3%83%A9%E3%83%B3+%E6%AD%8C%E8%A9%9E"
+    },
+    "createdAt": "2026-01-06T00:00:00.000Z"
+  },
+  {
+    "id": "song-005",
+    "title": "晴天",
+    "artist": "桑田佳祐",
+    "genre": "ロック",
+    "lowestNote": 48,
+    "highestNote": 72,
+    "availability": { "dam": true, "joysound": true },
+    "createdAt": "2026-01-07T00:00:00.000Z"
+  },
+  {
+    "id": "song-006",
+    "title": "レッツゴー",
+    "artist": "東京事変",
+    "genre": "ロック",
+    "lowestNote": 49,
+    "highestNote": 74,
+    "availability": { "dam": true, "joysound": false },
+    "createdAt": "2026-01-07T00:00:00.000Z"
+  },
+  {
+    "id": "song-007",
+    "title": "男の哀愁",
+    "artist": "氷川きよし",
+    "genre": "演歌",
+    "lowestNote": 45,
+    "highestNote": 67,
+    "availability": { "dam": true, "joysound": false },
+    "utattemitaMemo": "低音域中心。オク下は使わず原キーで。",
+    "createdAt": "2026-01-08T00:00:00.000Z"
+  },
+  {
+    "id": "song-008",
+    "title": "北の国から〜遥かなる大地より〜",
+    "artist": "さだまさし",
+    "genre": "フォーク",
+    "lowestNote": 47,
+    "highestNote": 70,
+    "availability": { "dam": true, "joysound": true },
+    "createdAt": "2026-01-08T00:00:00.000Z"
+  },
+  {
+    "id": "song-009",
+    "title": "Believe",
+    "artist": "Folder5",
+    "genre": "アイドル",
+    "lowestNote": 56,
+    "highestNote": 77,
+    "availability": { "dam": false, "joysound": true },
+    "createdAt": "2026-01-09T00:00:00.000Z"
+  },
+  {
+    "id": "song-010",
+    "title": "U.S.A.",
+    "artist": "DA PUMP",
+    "genre": "アイドル",
+    "lowestNote": 54,
+    "highestNote": 76,
+    "availability": { "dam": true, "joysound": true },
+    "createdAt": "2026-01-09T00:00:00.000Z"
+  },
+  {
+    "id": "song-011",
+    "title": "LOVE MACHINE",
+    "artist": "m-flo",
+    "genre": "R&B",
+    "lowestNote": 50,
+    "highestNote": 73,
+    "availability": { "dam": true, "joysound": true },
+    "createdAt": "2026-01-10T00:00:00.000Z"
+  },
+  {
+    "id": "song-012",
+    "title": "PIANO",
+    "artist": "森山直太朗",
+    "genre": "フォーク",
+    "lowestNote": 52,
+    "highestNote": 72,
+    "availability": { "dam": true, "joysound": true },
+    "createdAt": "2026-01-10T00:00:00.000Z"
+  },
+  {
+    "id": "song-013",
+    "title": "歌うたいのバラッド",
+    "artist": "斉藤和義",
+    "genre": "バラード",
+    "lowestNote": 47,
+    "highestNote": 68,
+    "availability": { "dam": true, "joysound": true },
+    "createdAt": "2026-01-11T00:00:00.000Z"
+  },
+  {
+    "id": "song-014",
+    "title": "マリーゴールド",
+    "artist": "あいみょん",
+    "genre": "バラード",
+    "lowestNote": 57,
+    "highestNote": 75,
+    "availability": { "dam": true, "joysound": true },
+    "links": {
+      "listenUrl": "https://www.youtube.com/results?search_query=%E3%81%82%E3%81%84%E3%81%BF%E3%82%87%E3%82%93+%E3%83%9E%E3%83%AA%E3%83%BC%E3%82%B4%E3%83%BC%E3%83%AB%E3%83%89"
+    },
+    "createdAt": "2026-01-11T00:00:00.000Z"
+  },
+  {
+    "id": "song-015",
+    "title": "虹",
+    "artist": "菅田将暉",
+    "genre": "J-POP",
+    "lowestNote": 53,
+    "highestNote": 73,
+    "availability": { "dam": true, "joysound": true },
+    "utattemitaMemo": "歌い出しが低め。基準音域の低音側を確認してから選曲。",
+    "createdAt": "2026-01-12T00:00:00.000Z"
+  }
+]
